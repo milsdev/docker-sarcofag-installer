@@ -30,4 +30,6 @@ rm -fv wp-content/mu-plugins/index.php
 
 ./vendor/bin/sarcofag install
 
-sleep 5000;
+while :; do
+   sleep 300
+done
