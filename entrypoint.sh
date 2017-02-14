@@ -9,7 +9,11 @@ done
 
 if [ -f "$DATABASE_SCHEMA" ]
 then
-	mysql -h ${HOST_NAME} -u ${ROOT_USER} -p${ROOT_PASSWORD} < ${DATABASE_SCHEMA}
+    if [ -z "${DATABASE+xxx}" ]; then
+        mysql -h ${HOST_NAME} -u ${ROOT_USER} -p${ROOT_PASSWORD}  < ${DATABASE_SCHEMA};
+    else
+        mysql -h ${HOST_NAME} -u ${ROOT_USER} -p${ROOT_PASSWORD} ${DATABASE} < ${DATABASE_SCHEMA};
+    fi
 else
 	echo "$DATABASE_SCHEMA not found."
 fi
@@ -30,4 +34,4 @@ rm -fv wp-content/mu-plugins/index.php
 
 ./vendor/bin/sarcofag install
 
-sleep 5000;
+while true; do sleep 1000; done
