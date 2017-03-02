@@ -23,6 +23,12 @@ fi
 echo "COMPOSER UPDATE";
 
 composer update;
+rm -fv wp-content/mu-plugins/index.php
+
+if [ -f ./vendor/bin/sarcofag ]; then
+    ./vendor/bin/sarcofag install
+fi
+
 cd wp-content/themes/$THEME_NAME
 touch style.css
 
@@ -35,13 +41,6 @@ if [ -z ${FRONTEND_BUILDER+x} ]; then
 else
     echo "RUN ${FRONTEND_BUILDER}";
     ${FRONTEND_BUILDER}
-fi
-
-cd ../../../
-rm -fv wp-content/mu-plugins/index.php
-
-if [ -f ./vendor/bin/sarcofag ]; then
-    ./vendor/bin/sarcofag install
 fi
 
 echo "Installation is complete!"
