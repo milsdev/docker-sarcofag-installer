@@ -10,8 +10,10 @@ done
 if [ -f "$DATABASE_SCHEMA" ]
 then
     if [ -z "${DATABASE+xxx}" ]; then
+        echo "All Databases (mysql -h ${HOST_NAME} -u ${ROOT_USER} -p${ROOT_PASSWORD}  < ${DATABASE_SCHEMA})";
         mysql -h ${HOST_NAME} -u ${ROOT_USER} -p${ROOT_PASSWORD}  < ${DATABASE_SCHEMA};
     else
+        echo "Single Database (mysql -h ${HOST_NAME} -u ${ROOT_USER} -p${ROOT_PASSWORD} ${DATABASE} < ${DATABASE_SCHEMA})";
         mysql -h ${HOST_NAME} -u ${ROOT_USER} -p${ROOT_PASSWORD} ${DATABASE} < ${DATABASE_SCHEMA};
     fi
 else
@@ -19,10 +21,14 @@ else
 fi
 
 echo "COMPOSER UPDATE";
-
 composer update;
+rm -fv wp-content/mu-plugins/index.php
 
-if [ -z "$ISSTAGE" ]
+if [ -f ./vendor/bin/sarcofag ]; then
+    ./vendor/bin/sarcofag install
+fi
+
+if [ -z $ISSTAGE ]
 then
   cd wp-content/themes/$THEME_NAME
   touch style.css
@@ -30,13 +36,16 @@ then
   echo "NPM UPDATE";
 
   npm update
-  ./node_modules/.bin/grunt
+  if [ -z ${FRONTEND_BUILDER+x} ]; then
+    echo "RUN node_modules/.bin/grunt";
+    ./node_modules/.bin/grunt
+  else
+    echo "RUN ${FRONTEND_BUILDER}";
+    ${FRONTEND_BUILDER}
+  fi
 
   cd ../../../
 fi
-
-rm -fv wp-content/mu-plugins/index.php
-./vendor/bin/sarcofag install
 
 echo "Creating .done file in /tmp to notify that everything done...."
 touch /tmp/.done
