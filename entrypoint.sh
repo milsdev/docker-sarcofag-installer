@@ -21,17 +21,24 @@ fi
 echo "COMPOSER UPDATE";
 
 composer update;
-cd wp-content/themes/$THEME_NAME
-touch style.css
 
-echo "NPM UPDATE";
+if [ -z "$ISSTAGE" ]
+then
+  cd wp-content/themes/$THEME_NAME
+  touch style.css
 
-npm update
-./node_modules/.bin/grunt
+  echo "NPM UPDATE";
 
-cd ../../../
+  npm update
+  ./node_modules/.bin/grunt
+
+  cd ../../../
+fi
+
 rm -fv wp-content/mu-plugins/index.php
-
 ./vendor/bin/sarcofag install
+
+echo "Creating .done file in /tmp to notify that everything done...."
+touch /tmp/.done
 
 while true; do sleep 1000; done
