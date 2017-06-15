@@ -18,7 +18,7 @@ RUN wget https://www.dotdeb.org/dotdeb.gpg
 RUN apt-key add dotdeb.gpg
 RUN apt-get update
 
-RUN apt-get install -y php7.0 php7.0-curl php7.0-zip
+RUN apt-get install -y php7.0 php7.0-curl php7.0-zip php7.0-gd
 RUN apt-get install mysql-client -y
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
