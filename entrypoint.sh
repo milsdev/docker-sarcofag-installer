@@ -32,10 +32,13 @@ if [ -z $ISSTAGE ]
 then
   cd wp-content/themes/$THEME_NAME
   touch style.css
+  
+  echo "NPM Set repo path";
+  npm config set registry http://registry.npmjs.org/
 
   echo "NPM UPDATE";
-
   npm update
+
   if [ -z ${FRONTEND_BUILDER+x} ]; then
     echo "RUN node_modules/.bin/grunt";
     ./node_modules/.bin/grunt
